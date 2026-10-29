@@ -666,19 +666,7 @@
     }
 
     #bar {
-      position: fixed;
-      left: 50%;
-      bottom: calc(.8rem + env(safe-area-inset-bottom, 0px));
-      transform: translateX(-50%);
-      z-index: 50;
-      background: #000;
-      color: #fff;
-      display: flex;
-      flex-wrap: wrap;
-      gap: .3rem;
-      padding: .4rem;
-      max-width: 96vw;
-      justify-content: center
+      display: none !important;
     }
 
     #bar button,
@@ -993,9 +981,7 @@
     /* text formatting: key = "cur.path" in S.sty */
     function fmt(o) { if (!cp) return toast("Click a piece of text first"); const k = cp.dataset.p, c = S.sty[k] || (S.sty[k] = {}); snap(); o(c); cp.style.cssText = css(c); dirty = true }
     function bar() {
-      const b = $("#bar"); if (!can) { b.hidden = true; return } b.hidden = false;
-      if (!editing) { b.innerHTML = `<button data-b="edit">Edit site</button>`; return }
-      b.innerHTML = `<button data-b="undo">Undo</button><button data-b="redo">Redo</button><span class="sep"></span><button data-b="B"><b>B</b></button><button data-b="I"><i>I</i></button><button data-b="U"><u>U</u></button><button data-b="L">Left</button><button data-b="C">Centre</button><button data-b="sm">A−</button><button data-b="lg">A+</button><button data-b="up">CAPS</button><select data-b="ff" aria-label="Font"><option value="">Font</option><option value="var(--serif)">Serif</option><option value="var(--sans)">Sans</option></select><span class="sep"></span><button data-b="d" class="${app.className === "" ? "on" : ""}">Desktop</button><button data-b="t" class="${app.classList.contains("tab") ? "on" : ""}">Tablet</button><button data-b="m" class="${app.classList.contains("mob") ? "on" : ""}">Mobile</button><span class="sep"></span><button data-b="wa">WhatsApp</button><button data-b="draft">Save draft</button><button data-b="pub">Publish</button><button data-b="done">Done</button>`
+      const b = $("#bar"); if (b) { b.hidden = true; b.style.display = "none"; }
     }
     $("#bar").addEventListener("mousedown", e => { if (e.target.closest("button")) e.preventDefault() });
     $("#bar").addEventListener("change", e => { if (e.target.dataset.b === "ff") fmt(c => c.ff = e.target.value) });
@@ -1022,7 +1008,7 @@
     route();
     (async () => {
       try {
-        if (typeof claude === "undefined") { can = true; return bar() } U = await claude.use("user"); A = await claude.use("artifact"); AS = await claude.use("assets"); can = !!(U && U.canEdit && U.canEdit());
+        if (typeof claude === "undefined") { can = false; return; } U = await claude.use("user"); A = await claude.use("artifact"); AS = await claude.use("assets"); can = !!(U && U.canEdit && U.canEdit());
         if (can) { try { const d = localStorage.getItem("cl_draft"); if (d) { S = JSON.parse(d); toast("Loaded your saved draft") } } catch (_) { } } route()
       } catch (_) { }
     })();
