@@ -755,18 +755,11 @@
             ]
           },
           {
-            type: "imgtext",
+            type: "text",
             bg: "l",
             label: "Why Colourist?",
-            title: "Asia’s Leading & No.1 Color Expert.",
-            description: "<b>Colourist is Asia’s Leading &amp; No.1 Color Expert.</b><br><br>Located in ASHTA, we are dedicated to make Indonesians feel confident in their unique color.<br><br>Colourist as mentor of dozens professional color analysts, have mastered the core of color analysis from various countries around the world to set the benchmark for Indonesians.<br><br>Trusted by thousands of clients, brands, and publications globally and locally, we deliver real transformations through the power of color.",
-            media: {
-              type: "image",
-              url: "Asset/why_colourist.png",
-              alt: "Why Colourist Partners and Recognitions",
-              position: "50% 20%"
-            },
-            flip: true,
+            title: "Why Colourist?",
+            description: "Colourist is Asia’s Leading &amp; No.1 Color Expert.<br><br>Located in ASHTA, we are dedicated to make Indonesians feel confident in their unique color.<br><br>Colourist as mentor of dozens professional color analysts, have mastered the core of color analysis from various countries around the world to set the benchmark for Indonesians.<br><br>Trusted by thousands of clients, brands, and publications globally and locally, we deliver real transformations through the power of color.",
             buttonLink: "http://bit.ly/BookMySessionToday",
             buttonText: "Book a colourist session"
           },
@@ -1060,7 +1053,8 @@
             </div>`;
         }
 
-        case "text":
+        case "text": {
+          const btnHtml = section.buttonText ? `<p style="margin-top: 2rem;">${renderButton(section.buttonText, section.buttonLink)}</p>` : "";
           return `
             <div class="wrap">
               ${section.label ? `<p class="sm">${escapeHtml(section.label)}</p>` : ""}
@@ -1068,7 +1062,9 @@
               <div style="margin-top: 2rem;">
                 <p>${section.description}</p>
               </div>
+              ${btnHtml}
             </div>`;
+        }
 
         case "imgtext": {
           const flipClass = section.flip ? " flip" : "";
