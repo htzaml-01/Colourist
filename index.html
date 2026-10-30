@@ -192,11 +192,15 @@
 
     /* Mobile Fullscreen Navigation Overlay (Independent of Header) */
     .mobile-drawer {
+      display: none;
       position: fixed;
       inset: 0;
-      z-index: 9999;
-      background: #ffffff;
-      display: flex;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 999999;
+      background: #ffffff !important;
+      background-color: #ffffff !important;
       flex-direction: column;
       opacity: 0;
       pointer-events: none;
@@ -207,9 +211,10 @@
     }
 
     .mobile-drawer.open {
-      opacity: 1;
-      pointer-events: auto;
-      visibility: visible;
+      display: flex !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      visibility: visible !important;
     }
 
     .mobile-drawer-header {
