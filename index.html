@@ -1485,6 +1485,19 @@
       };
       document.title = pageTitles[currentPage] || "Colourist";
 
+      // Check for dynamically managed transformations from Admin Panel
+      try {
+        const storedTransformations = localStorage.getItem("COLOURIST_PORTFOLIO_TRANSFORMATIONS");
+        if (storedTransformations) {
+          const parsedTransformations = JSON.parse(storedTransformations);
+          if (Array.isArray(parsedTransformations) && parsedTransformations.length > 0) {
+            SITE_DATA.pages.transformations[0].items = parsedTransformations;
+          }
+        }
+      } catch (e) {
+        console.warn("Could not load custom transformations from storage", e);
+      }
+
       renderPage();
       scrollTo(0, 0);
     }

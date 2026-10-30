@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Colourist Admin — Manage Transformations</title>
+  
+  <!-- Google Fonts: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    @font-face {
+      font-family: 'Black Mango';
+      src: url('Asset/BlackMango.woff2') format('woff2'),
+           url('Asset/BlackMango.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --font-title: 'Black Mango', 'Playfair Display', Georgia, serif;
+      --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --color-primary: #111111;
+      --color-bg: #f8f9fa;
+      --color-card: #ffffff;
+      --color-border: #e5e7eb;
+      --color-danger: #ef4444;
+      --color-success: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--color-bg);
+      color: var(--color-primary);
+      line-height: 1.5;
+      padding-bottom: 5rem;
+    }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #ffffff;
+      border-bottom: 1px solid var(--color-border);
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .admin-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .admin-logo img {
+      height: 28px;
+      width: auto;
+    }
+
+    .badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: #111111;
+      color: #ffffff;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .btn-header-site {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #555555;
+      text-decoration: none;
+      padding: 0.4rem 0.8rem;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-header-site:hover {
+      color: #000000;
+      border-color: #000000;
+    }
+
+    /* Container */
+    .container {
+      max-width: 860px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+
+    .page-title {
+      font-family: var(--font-title);
+      font-size: clamp(1.8rem, 5vw, 2.4rem);
+      margin-bottom: 0.3rem;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .page-subtitle {
+      font-size: 0.85rem;
+      color: #666666;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Actions Bar */
+    .actions-bar {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.2rem;
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: #000000;
+      color: #ffffff;
+    }
+
+    .btn-primary:hover {
+      background: #262626;
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: #111111;
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4f6;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    .btn-sm {
+      padding: 0.45rem 0.8rem;
+      font-size: 0.75rem;
+      border-radius: 6px;
+    }
+
+    /* Notice Box */
+    .sync-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 8px;
+      padding: 0.9rem 1.1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.8rem;
+      color: #1e40af;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .sync-banner span {
+      display: block;
+    }
+
+    /* Items List */
+    .items-count {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4b5563;
+      margin-bottom: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .items-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .item-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 1rem;
+      display: flex;
+      gap: 1.2rem;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .item-card:hover {
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .item-preview {
+      width: 90px;
+      height: 90px;
+      border-radius: 8px;
+      background: #111111;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .item-preview img, .item-preview video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .media-type-tag {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      background: rgba(0,0,0,0.7);
+      color: #ffffff;
+      font-size: 0.6rem;
+      font-weight: 700;
+      padding: 2px 4px;
+      border-radius: 3px;
+      text-transform: uppercase;
+    }
+
+    .item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .item-category {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #6b7280;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 0.2rem;
+      background: #f3f4f6;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .item-caption {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #111111;
+      margin-bottom: 0.3rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .item-url {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 0.4rem;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    /* Order buttons */
+    .reorder-btns {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-right: 0.2rem;
+    }
+
+    .btn-icon {
+      background: #f3f4f6;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    .btn-icon:hover {
+      background: #e5e7eb;
+    }
+
+    /* Modal Sheet for Edit/Add */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal-sheet {
+      background: #ffffff;
+      width: 100%;
+      max-width: 600px;
+      border-radius: 20px 20px 0 0;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.5rem clamp(1rem, 4vw, 2rem) 2.5rem;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+      animation: slideUp 0.25s ease-out;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .modal-title {
+      font-family: var(--font-title);
+      font-size: 1.4rem;
+      font-weight: 400;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      cursor: pointer;
+      color: #999999;
+      padding: 0.2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #374151;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: #111111;
+      background: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-control:focus {
+      border-color: #000000;
+    }
+
+    .form-help {
+      font-size: 0.72rem;
+      color: #6b7280;
+      margin-top: 0.3rem;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .radio-card {
+      flex: 1;
+      border: 1px solid var(--color-border);
+      padding: 0.7rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .radio-card.active {
+      border-color: #000000;
+      background: #f9fafb;
+      font-weight: 600;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #111111;
+      color: #ffffff;
+      padding: 0.75rem 1.4rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      z-index: 200;
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .item-card {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .item-preview {
+        width: 100%;
+        height: 160px;
+      }
+      .item-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+      .reorder-btns {
+        flex-direction: row;
+        width: 100%;
+        justify-content: flex-start;
+        margin-bottom: 0.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Admin Header -->
+  <header>
+    <div class="admin-logo">
+      <img src="Asset/logo.png" alt="Colourist">
+      <span class="badge">Admin Panel</span>
+    </div>
+    <a href="index.html#transformations" class="btn-header-site" target="_blank">View Live Site &rarr;</a>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container">
+    <h1 class="page-title">Manage Transformations</h1>
+    <p class="page-subtitle">Kelola foto, video, kategori, dan deskripsi portofolio transformasi Colourist langsung dari HP.</p>
+
+    <!-- Sync status banner -->
+    <div class="sync-banner">
+      <div>
+        <strong>Status Data:</strong>
+        <span id="storageStatusText">Tersimpan secara lokal di browser HP Anda.</span>
+      </div>
+      <button class="btn btn-sm btn-secondary" onclick="resetToDefaults()">Reset Default</button>
+    </div>
+
+    <!-- Actions Bar -->
+    <div class="actions-bar">
+      <button class="btn btn-primary" onclick="openAddModal()">
+        <span>+</span> Tambah Foto / Video Baru
+      </button>
+      <button class="btn btn-secondary" onclick="exportDataJson()">
+        <span>⬇</span> Download Backup (JSON)
+      </button>
+    </div>
+
+    <!-- Items counter -->
+    <div class="items-count">
+      <span id="itemsCounterText">0 Item Ditemukan</span>
+      <span style="font-size: 0.75rem; color: #6b7280;">Urutan dapat diatur langsung</span>
+    </div>
+
+    <!-- Items Grid List -->
+    <div id="itemsGrid" class="items-grid"></div>
+  </div>
+
+  <!-- Modal Sheet (Add / Edit) -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-sheet">
+      <div class="modal-header">
+        <h2 id="modalTitle" class="modal-title">Tambah Item Baru</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+
+      <form id="itemForm" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" id="editIndex" value="-1">
+
+        <div class="form-group">
+          <label class="form-label">Tipe Media</label>
+          <div class="radio-group">
+            <label class="radio-card" id="radioImageLabel" onclick="setMediaType('image')">
+              <input type="radio" name="mediaType" value="image" id="typeImage" checked> Foto (Image)
+            </label>
+            <label class="radio-card" id="radioVideoLabel" onclick="setMediaType('video')">
+              <input type="radio" name="mediaType" value="video" id="typeVideo"> Video (MP4)
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="mediaUrl">URL atau File Media (Asset)</label>
+          <input type="text" id="mediaUrl" class="form-control" placeholder="Contoh: Asset/trans_1.mp4 atau https://..." required>
+          <p class="form-help">Bisa gunakan path file lokal (misal: <code>Asset/nama_foto.jpg</code>) atau link URL online.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="categorySelect">Kategori Filter</label>
+          <input type="text" id="categoryInput" class="form-control" placeholder="Atelier / Public Figure / Students / Media" required list="categoryList">
+          <datalist id="categoryList">
+            <option value="Atelier">
+            <option value="Public Figure">
+            <option value="Students">
+            <option value="Media">
+            <option value="Personal Color Analysis">
+            <option value="Makeup & Styling">
+            <option value="Personal Styling">
+          </datalist>
+          <p class="form-help">Pilih kategori yang sudah ada atau ketik kategori baru.</p>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="captionInput">Judul / Caption</label>
+          <input type="text" id="captionInput" class="form-control" placeholder="Contoh: VIP Client Transformation" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="altInput">Alt Text / Deskripsi Singkat</label>
+          <input type="text" id="altInput" class="form-control" placeholder="Contoh: Draping & Seasonal Color Harmony">
+        </div>
+
+        <div style="display: flex; gap: 0.8rem; margin-top: 1.8rem;">
+          <button type="button" class="btn btn-secondary" style="flex: 1;" onclick="closeModal()">Batal</button>
+          <button type="submit" class="btn btn-primary" style="flex: 1;" id="saveBtn">Simpan Perubahan</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast">Data berhasil disimpan!</div>
+
+  <!-- Admin Logic Script -->
+  <script>
+    const STORAGE_KEY = "COLOURIST_PORTFOLIO_TRANSFORMATIONS";
+
+    // Default transformation portfolio data matching index.html
+    const DEFAULT_TRANSFORMATIONS = [
+      { media: { type: "image", url: "Asset/a078afb1-5988-4495-9f79-e99accf47c6f.png", alt: "Atelier Draping Station", position: "50% 50%" }, category: "Atelier", caption: "Controlled Light Draping Suite" },
+      { media: { type: "image", url: "Asset/de1bc2dba489e4a3206531c28e7d1d0e.jpg", alt: "Atelier Studio Interior", position: "50% 50%" }, category: "Atelier", caption: "ASHTA District 8 Studio Space" },
+      { media: { type: "image", url: "Asset/1c528e59-624d-4e95-bd54-f92ff7a03c77.png", alt: "Atelier Consultation Lounge", position: "50% 50%" }, category: "Atelier", caption: "Client Consultation Lounge" },
+      { media: { type: "image", url: "Asset/bc71791a4efc35d17151345066050ae4.jpg", alt: "Atelier Custom Bar", position: "50% 50%" }, category: "Atelier", caption: "Custom Color Formulation Bar" },
+      { media: { type: "image", url: "Asset/47b166ad7b24398fd9726921556c2f05.jpg", alt: "Atelier Styling Suite", position: "50% 50%" }, category: "Atelier", caption: "Private Styling Suite" },
+      { media: { type: "image", url: "Asset/86295e1fea5a623cd1163ca1b6126b06.jpg", alt: "Atelier Makeup Station", position: "50% 50%" }, category: "Atelier", caption: "Masterclass Beauty Mirror" },
+
+      { media: { type: "image", url: "Asset/cf18bde04966f85d3fd6ffe6c3e93d6a.jpg", alt: "Public Figure Transformation", position: "50% 50%" }, category: "Public Figure", caption: "VIP Client Transformation" },
+      { media: { type: "image", url: "Asset/17d14c86d3cb8e9814effe1a13946290.jpg", alt: "Public Figure Analysis", position: "50% 50%" }, category: "Public Figure", caption: "Seasonal Color Harmony" },
+      { media: { type: "image", url: "Asset/54091caea5ca7e602a5c72d0323e164f.jpg", alt: "Public Figure Styling", position: "50% 50%" }, category: "Public Figure", caption: "Wardrobe & Palette Curation" },
+      { media: { type: "image", url: "Asset/a4aaed127366c8a26013897ef5d69327.jpg", alt: "Public Figure Lipstick", position: "50% 50%" }, category: "Public Figure", caption: "Bespoke Shade Formulation" },
+      { media: { type: "image", url: "Asset/844063ee3d8dadbe85d9a58d036cf3f9.jpg", alt: "Public Figure Consultation", position: "50% 50%" }, category: "Public Figure", caption: "Natural Harmony Alignment" },
+      { media: { type: "image", url: "Asset/a9b2559847863c85a96d2cb5bbadc036.jpg", alt: "Public Figure Wardrobe", position: "50% 50%" }, category: "Public Figure", caption: "Editorial Styling Direction" },
+      { media: { type: "image", url: "Asset/76c60e282c78588fbb41bba6c9e69e4c.jpg", alt: "Zerlinda Master Consultation", position: "50% 50%" }, category: "Public Figure", caption: "Celebrity Client Session" },
+      { media: { type: "image", url: "Asset/why_colourist.png", alt: "Miss Indonesia & Miss World", position: "50% 70%" }, category: "Public Figure", caption: "Miss Indonesia & Miss World Delegates" },
+      { media: { type: "image", url: "Asset/17d14c86d3cb8e9814effe1a13946290.jpg", alt: "Public Figure Draping", position: "50% 50%" }, category: "Public Figure", caption: "Warm Spring Palette Analysis" },
+      { media: { type: "image", url: "Asset/cf18bde04966f85d3fd6ffe6c3e93d6a.jpg", alt: "Public Figure Glow", position: "50% 50%" }, category: "Public Figure", caption: "Cool Summer Tone Harmony" },
+      { media: { type: "image", url: "Asset/54091caea5ca7e602a5c72d0323e164f.jpg", alt: "Public Figure Elegance", position: "50% 50%" }, category: "Public Figure", caption: "Executive Wardrobe Transformation" },
+      { media: { type: "image", url: "Asset/a4aaed127366c8a26013897ef5d69327.jpg", alt: "Public Figure Signature Shade", position: "50% 50%" }, category: "Public Figure", caption: "Signature Custom Blend" },
+
+      { media: { type: "video", url: "Asset/trans_2.mp4", alt: "Colourist Analyst Academy", position: "50% 50%" }, category: "Students", caption: "Professional Color Analyst Mentorship & Certification" },
+
+      { media: { type: "image", url: "Asset/why_colourist.png", alt: "Kompas TV & CNN Media Feature", position: "50% 88%" }, category: "Media", caption: "Kompas TV & CNN Indonesia Feature" },
+      { media: { type: "image", url: "Asset/why_colourist.png", alt: "The Jakarta Post & Tempo Feature", position: "50% 92%" }, category: "Media", caption: "The Jakarta Post & Tempo.co Coverage" },
+      { media: { type: "image", url: "Asset/why_colourist.png", alt: "Trans 7 & Vemme Daily Feature", position: "50% 95%" }, category: "Media", caption: "Trans 7, Vemme Daily & Rans Entertainment" }
+    ];
+
+    let items = [];
+
+    // Load items from localStorage or defaults
+    function loadItems() {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          items = JSON.parse(stored);
+        } else {
+          items = JSON.parse(JSON.stringify(DEFAULT_TRANSFORMATIONS));
+          saveItems(false);
+        }
+      } catch (err) {
+        console.error("Failed to parse items:", err);
+        items = JSON.parse(JSON.stringify(DEFAULT_TRANSFORMATIONS));
+      }
+      renderItems();
+    }
+
+    // Save items to localStorage
+    function saveItems(notify = true) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      if (notify) showToast("Perubahan tersimpan!");
+    }
+
+    // Render list
+    function renderItems() {
+      const container = document.getElementById("itemsGrid");
+      const counter = document.getElementById("itemsCounterText");
+      counter.textContent = `${items.length} Item Ditampilkan`;
+
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 3rem 1rem; background: #ffffff; border-radius: 12px; border: 1px dashed var(--color-border);">
+            <p style="color: #666; margin-bottom: 1rem;">Belum ada item portfolio yang ditambahkan.</p>
+            <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ Tambah Item Pertama</button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = items.map((item, index) => {
+        const isVideo = item.media && item.media.type === "video";
+        const mediaTag = isVideo 
+          ? `<video src="${item.media.url}" muted playsinline></video>`
+          : `<img src="${item.media.url}" alt="${item.media.alt || ''}" onerror="this.src='Asset/logo.png'">`;
+
+        return `
+          <div class="item-card">
+            <div class="reorder-btns">
+              <button class="btn-icon" title="Pindah ke Atas" onclick="moveItem(${index}, -1)" ${index === 0 ? 'disabled style="opacity:0.3"' : ''}>&uarr;</button>
+              <button class="btn-icon" title="Pindah ke Bawah" onclick="moveItem(${index}, 1)" ${index === items.length - 1 ? 'disabled style="opacity:0.3"' : ''}>&darr;</button>
+            </div>
+            <div class="item-preview">
+              ${mediaTag}
+              <span class="media-type-tag">${isVideo ? 'VIDEO' : 'FOTO'}</span>
+            </div>
+            <div class="item-info">
+              <span class="item-category">${escapeHtml(item.category || 'Atelier')}</span>
+              <h3 class="item-caption">${escapeHtml(item.caption || 'Tanpa Judul')}</h3>
+              <p class="item-url">${escapeHtml(item.media ? item.media.url : '')}</p>
+              <div class="item-actions">
+                <button class="btn btn-sm btn-secondary" onclick="openEditModal(${index})">Edit</button>
+                <button class="btn btn-sm btn-danger" onclick="deleteItem(${index})">Hapus</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function setMediaType(type) {
+      document.getElementById("typeImage").checked = (type === "image");
+      document.getElementById("typeVideo").checked = (type === "video");
+      document.getElementById("radioImageLabel").classList.toggle("active", type === "image");
+      document.getElementById("radioVideoLabel").classList.toggle("active", type === "video");
+    }
+
+    function openAddModal() {
+      document.getElementById("modalTitle").textContent = "Tambah Foto / Video Baru";
+      document.getElementById("editIndex").value = "-1";
+      document.getElementById("itemForm").reset();
+      setMediaType("image");
+      document.getElementById("modalOverlay").classList.add("open");
+    }
+
+    function openEditModal(index) {
+      const item = items[index];
+      if (!item) return;
+
+      document.getElementById("modalTitle").textContent = "Edit Item Portfolio";
+      document.getElementById("editIndex").value = index;
+      
+      const type = item.media && item.media.type === "video" ? "video" : "image";
+      setMediaType(type);
+
+      document.getElementById("mediaUrl").value = item.media ? item.media.url : "";
+      document.getElementById("categoryInput").value = item.category || "";
+      document.getElementById("captionInput").value = item.caption || "";
+      document.getElementById("altInput").value = item.media ? (item.media.alt || "") : "";
+
+      document.getElementById("modalOverlay").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("modalOverlay").classList.remove("open");
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const editIndex = parseInt(document.getElementById("editIndex").value, 10);
+      const isVideo = document.getElementById("typeVideo").checked;
+      const mediaUrl = document.getElementById("mediaUrl").value.trim();
+      const category = document.getElementById("categoryInput").value.trim() || "Atelier";
+      const caption = document.getElementById("captionInput").value.trim();
+      const alt = document.getElementById("altInput").value.trim() || caption;
+
+      const newItem = {
+        media: {
+          type: isVideo ? "video" : "image",
+          url: mediaUrl,
+          alt: alt,
+          position: "50% 50%"
+        },
+        category: category,
+        caption: caption
+      };
+
+      if (editIndex >= 0 && editIndex < items.length) {
+        items[editIndex] = newItem;
+      } else {
+        items.unshift(newItem); // Tambahkan ke paling atas
+      }
+
+      saveItems(true);
+      renderItems();
+      closeModal();
+    }
+
+    function deleteItem(index) {
+      if (confirm(`Hapus "${items[index].caption || 'item ini'}"?`)) {
+        items.splice(index, 1);
+        saveItems(true);
+        renderItems();
+      }
+    }
+
+    function moveItem(index, direction) {
+      const newIndex = index + direction;
+      if (newIndex < 0 || newIndex >= items.length) return;
+      const temp = items[index];
+      items[index] = items[newIndex];
+      items[newIndex] = temp;
+      saveItems(true);
+      renderItems();
+    }
+
+    function resetToDefaults() {
+      if (confirm("Kembalikan daftar portfolio ke settingan awal (default)?")) {
+        items = JSON.parse(JSON.stringify(DEFAULT_TRANSFORMATIONS));
+        saveItems(true);
+        renderItems();
+      }
+    }
+
+    function exportDataJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(items, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", "colourist_transformations.json");
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("File JSON berhasil didownload!");
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2500);
+    }
+
+    function escapeHtml(str) {
+      return String(str || '').replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
+    }
+
+    // Init
+    loadItems();
+  </script>
+</body>
+</html>
